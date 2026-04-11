@@ -30,3 +30,10 @@ export const girvi = sqliteTable("girvi", {
   interestRate: real("interest_rate").notNull(), // ब्याज दर (% प्रति माह)
   entryDate: text("entry_date").$defaultFn(() => new Date().toISOString()),
 });
+export const rates = sqliteTable("rates", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  metal: text("metal").notNull().unique(),
+  purity: text("purity"),
+  price: real("price").notNull(),
+  updatedAt: text("updated_at").$defaultFn(() => new Date().toISOString()),
+});
