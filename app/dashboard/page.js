@@ -1,93 +1,112 @@
-import React, { Suspense } from "react";
-import GirviForm from "@/components/GirviForm";
-import GirviList from "@/components/GirviList";
-import DailyRateCard from "@/components/DailyRateCard";
+import { cookies } from "next/headers";
+import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
-// यह पेज Server Component है (By Default)
-// इसका सारा डेटा फेचिंग सर्वर पर ही खत्म हो जाता है
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const cookieStore = await cookies();
+  const session = await getSession(cookieStore.get("session")?.value);
+  if (!session) redirect("/");
+
+  if (session.status !== "active") {
+    const expiry = session.expiryDate ? new Date(session.expiryDate) : null;
+    if (!expiry || new Date() > expiry) {
+      redirect("https://nishantsoftwares.in/sunar?email=" + encodeURIComponent(session.email));
+    }
+  }
+
+  const daysLeft = session.expiryDate
+    ? Math.ceil((new Date(session.expiryDate) - new Date()) / (1000 * 60 * 60 * 24))
+    : 0;
+
   return (
-    <div className="min-h-screen bg-[#F9F9F9] font-sans text-zinc-900 pb-20">
-      
-      {/* Top Navigation / Header */}
-      <header className="bg-white border-b border-zinc-200 px-6 py-5 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-[#AA7D6E] rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
-              💎
-            </div>
+    <div className="min-h-screen bg-[#F9F9F9] pb-20">
+      {/* Header */}
+      <header className="bg-white border-b border-zinc-200 px-4 py-4 sticky top-0 z-50">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 bg-[#AA7D6E] rounded-xl flex items-center justify-center text-white text-lg">💎</div>
             <div>
-              <h1 className="text-2xl font-black text-zinc-800 tracking-tight">
-                स्वर्ण<span className="text-[#AA7D6E]">शिल्पी</span>
-              </h1>
-              <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-                डिजिटल मुनीम | कामता प्रसाद
-              </p>
+              <h1 className="text-lg font-black text-zinc-800 leading-tight">स्वर्ण<span className="text-[#AA7D6E]">शिल्पी</span></h1>
+              <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest">डिजिटल मुनीम</p>
             </div>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="bg-zinc-100 px-5 py-2 rounded-2xl font-bold text-zinc-600 text-sm border border-zinc-200">
-              📅 {new Intl.DateTimeFormat('hi-IN', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date())}
-            </div>
-          </div>
+          <a href="/api/auth/logout" className="text-xs text-zinc-400 border border-zinc-200 px-3 py-1.5 rounded-lg">लॉगआउट</a>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-10">
-        {/* Main Grid: Rate and Form */}
-        <div className="grid lg:grid-cols-12 gap-10">
-          
-          {/* Left: Controls (Daily Rate & Alerts) */}
-          <div className="lg:col-span-4 space-y-8">
-            <DailyRateCard />
-            
-            <div className="bg-white p-8 rounded-[2rem] border-2 border-dashed border-amber-200">
-              <h4 className="font-black text-amber-700 mb-3 flex items-center gap-2">
-                ⚠️ रिमाइंडर्स
-              </h4>
-              <ul className="text-sm text-zinc-500 space-y-3 font-medium">
-                <li className="flex gap-2">🔹 गिरवी रसीद पर साइन ज़रूर लें।</li>
-                <li className="flex gap-2">🔹 पुराना सोना लेते समय टंच चेक करें।</li>
-                <li className="flex gap-2">🔹 बैकअप हर रात ऑटोमैटिक होता है।</li>
-              </ul>
-            </div>
+      <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">
+        {/* Trial Banner */}
+        {session.status === "trial" && daysLeft <= 3 && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3">
+            <p className="text-red-600 font-bold text-sm">⚠️ {daysLeft} दिन में परीक्षण समाप्त होगा।</p>
+            <a href={"https://nishantsoftwares.in/sunar?email=" + encodeURIComponent(session.email)}
+              className="inline-block mt-1 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-lg">
+              अभी खरीदें
+            </a>
           </div>
+        )}
 
-          {/* Right: Girvi Entry Form */}
-          <div className="lg:col-span-8">
-            <GirviForm />
-            
-            <div className="mt-12">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-black text-zinc-800 flex items-center gap-3">
-                  <span className="w-3 h-8 bg-[#AA7D6E] rounded-full"></span>
-                  सक्रिय गिरवी खाता
-                </h2>
-                <button className="text-sm font-bold text-[#AA7D6E] hover:underline">
-                  सभी रिकॉर्ड देखें →
-                </button>
-              </div>
-
-              {/* Suspense ensures the page doesn't freeze while fetching from Turso */}
-              <Suspense fallback={
-                <div className="w-full p-20 bg-white rounded-[2rem] border border-zinc-100 flex flex-col items-center justify-center">
-                  <div className="w-12 h-12 border-4 border-[#AA7D6E] border-t-transparent rounded-full animate-spin mb-4"></div>
-                  <p className="font-bold text-zinc-400">डेटाबेस से रिकॉर्ड सुरक्षित लोड हो रहे हैं...</p>
-                </div>
-              }>
-                <GirviList />
-              </Suspense>
-            </div>
+        {session.status === "trial" && daysLeft > 3 && (
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
+            <p className="text-amber-600 font-semibold text-sm">⏳ {daysLeft} दिन का मुफ्त परीक्षण चल रहा है।</p>
           </div>
+        )}
 
+        {/* नमस्ते */}
+        <div className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm">
+          <p className="text-zinc-500 text-sm">नमस्ते,</p>
+          <p className="text-xl font-black text-zinc-800">{session.name} 🙏</p>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2 gap-3">
+          <Link href="/dashboard/girvi" className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col items-center gap-2 hover:border-[#AA7D6E] transition">
+            <span className="text-3xl">🏦</span>
+            <span className="font-bold text-zinc-800 text-sm">गिरवी</span>
+            <span className="text-xs text-zinc-400">बंधक का हिसाब</span>
+          </Link>
+          <Link href="/dashboard/karigar" className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col items-center gap-2 hover:border-[#AA7D6E] transition">
+            <span className="text-3xl">🔨</span>
+            <span className="font-bold text-zinc-800 text-sm">कारीगर</span>
+            <span className="text-xs text-zinc-400">काम का हिसाब</span>
+          </Link>
+          <Link href="/dashboard/bhav" className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col items-center gap-2 hover:border-[#AA7D6E] transition">
+            <span className="text-3xl">📈</span>
+            <span className="font-bold text-zinc-800 text-sm">भाव</span>
+            <span className="text-xs text-zinc-400">सोना-चाँदी रेट</span>
+          </Link>
+          <Link href="/dashboard/bill" className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col items-center gap-2 hover:border-[#AA7D6E] transition">
+            <span className="text-3xl">🧾</span>
+            <span className="font-bold text-zinc-800 text-sm">बिल</span>
+            <span className="text-xs text-zinc-400">बिल बनाओ</span>
+          </Link>
         </div>
       </main>
 
-      {/* Footer / Status Bar */}
-      <footer className="fixed bottom-0 w-full bg-white border-t border-zinc-100 px-6 py-3 text-center text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-        Database Status: <span className="text-green-500">Connected to Turso (SQLite)</span> | Powered by Nishant Software Solutions
-      </footer>
+      {/* Bottom Nav */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-200 flex justify-around items-center py-2">
+        <Link href="/dashboard" className="flex flex-col items-center gap-0.5 px-3 py-1 text-[#AA7D6E]">
+          <span className="text-xl">🏠</span>
+          <span className="text-[10px] font-bold">होम</span>
+        </Link>
+        <Link href="/dashboard/girvi" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
+          <span className="text-xl">🏦</span>
+          <span className="text-[10px] font-bold">गिरवी</span>
+        </Link>
+        <Link href="/dashboard/karigar" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
+          <span className="text-xl">🔨</span>
+          <span className="text-[10px] font-bold">कारीगर</span>
+        </Link>
+        <Link href="/dashboard/bhav" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
+          <span className="text-xl">📈</span>
+          <span className="text-[10px] font-bold">भाव</span>
+        </Link>
+        <Link href="/dashboard/bill" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
+          <span className="text-xl">🧾</span>
+          <span className="text-[10px] font-bold">बिल</span>
+        </Link>
+      </nav>
     </div>
   );
 }

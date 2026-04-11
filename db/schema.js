@@ -1,39 +1,55 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 
-// ग्राहकों का खाता (CRM)
-export const customers = sqliteTable("customers", {
+export const users = sqliteTable("users", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  name: text("name").notNull(),
-  phone: text("phone").unique(),
-  address: text("address"),
+  email: text("email").notNull().unique(),
+  name: text("name"),
+  status: text("status").notNull().default("trial"),
+  expiryDate: text("expiry_date"),
+  reminderSent: integer("reminder_sent").default(0),
   createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
 });
 
-// स्टॉक और इन्वेंटरी
-export const items = sqliteTable("items", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  title: text("title").notNull(), // जैसे: 'सोने का हार', 'चांदी की पायल'
-  category: text("category").notNull(), // Gold / Silver / Diamond
-  purity: text("purity"), // 22k, 18k, 916
-  grossWeight: real("gross_weight"), 
-  netWeight: real("net_weight"),
-  huid: text("huid"),
-  status: text("status").$default(() => "स्टॉक में"), // स्टॉक में, बिक गया
-});
-
-// गिरवी का हिसाब (Mortgage)
-export const girvi = sqliteTable("girvi", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  customerId: integer("customer_id").references(() => customers.id),
-  itemDetails: text("item_details").notNull(),
-  loanAmount: integer("loan_amount").notNull(), // कितना पैसा दिया
-  interestRate: real("interest_rate").notNull(), // ब्याज दर (% प्रति माह)
-  entryDate: text("entry_date").$defaultFn(() => new Date().toISOString()),
-});
 export const rates = sqliteTable("rates", {
   id: integer("id").primaryKey({ autoIncrement: true }),
-  metal: text("metal").notNull().unique(),
+  userId: integer("user_id").notNull(),
+  metal: text("metal").notNull(),
   purity: text("purity"),
   price: real("price").notNull(),
   updatedAt: text("updated_at").$defaultFn(() => new Date().toISOString()),
+});
+
+export const girvi = sqliteTable("girvi", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull(),
+  customerName: text("customer_name").notNull(),
+  customerPhone: text("customer_phone"),
+  itemDetails: text("item_details").notNull(),
+  loanAmount: integer("loan_amount").notNull(),
+  interestRate: real("interest_rate").notNull(),
+  status: text("status").notNull().default("active"),
+  entryDate: text("entry_date").$defaultFn(() => new Date().toISOString()),
+  closeDate: text("close_date"),
+});
+
+export const karigars = sqliteTable("karigars", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull(),
+  name: text("name").notNull(),
+  phone: text("phone"),
+  createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
+});
+
+export const karigarWork = sqliteTable("karigar_work", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull(),
+  karigarId: integer("karigar_id").notNull(),
+  description: text("description").notNull(),
+  metalType: text("metal_type").notNull(),
+  issuedWeight: real("issued_weight").notNull(),
+  returnedWeight: real("returned_weight"),
+  labourCharge: real("labour_charge"),
+  status: text("status").notNull().default("pending"),
+  issuedAt: text("issued_at").$defaultFn(() => new Date().toISOString()),
+  returnedAt: text("returned_at"),
 });
