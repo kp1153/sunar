@@ -221,18 +221,32 @@ export default function Home() {
       <footer className="bg-zinc-900 text-zinc-500 py-10 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#AA7D6E] rounded flex items-center justify-center text-white text-xl">💎</div>
+            <div className="w-8 h-8 bg-[#AA7D6E] rounded flex items-center justify-center text-white text-xl">
+              💎
+            </div>
             <span className="font-bold text-xl text-white">स्वर्णशिल्पी</span>
           </div>
           <div className="text-center">
-            <p className="font-bold text-zinc-300">© 2026 निशांत सॉफ्टवेयर सॉल्यूशन्स</p>
+            <p className="font-bold text-zinc-300">
+              © 2026 निशांत सॉफ्टवेयर सॉल्यूशन्स
+            </p>
             <p className="text-sm italic">सप्रेम निर्मित: कामता प्रसाद</p>
           </div>
           <div className="flex gap-4 text-sm font-semibold">
-            <a href="tel:+919996865069" className="hover:text-white transition">📞 9996865069</a>
-            <a href="https://wa.me/919996865069" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">💬 WhatsApp</a>
+            <a href="tel:+919996865069" className="hover:text-white transition">
+              📞 9996865069
+            </a>
+            <a
+              href="https://wa.me/919996865069"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition"
+            >
+              💬 WhatsApp
+            </a>
           </div>
         </div>
       </footer>
-
-      
+    </div>
+  );
+}
