@@ -53,3 +53,13 @@ export const karigarWork = sqliteTable("karigar_work", {
   issuedAt: text("issued_at").$defaultFn(() => new Date().toISOString()),
   returnedAt: text("returned_at"),
 });
+export const settings = sqliteTable("settings", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull().unique(),
+  shopName: text("shop_name"),
+  ownerName: text("owner_name"),
+  phone: text("phone"),
+  address: text("address"),
+  gstin: text("gstin"),
+  updatedAt: text("updated_at").$defaultFn(() => new Date().toISOString()),
+});
