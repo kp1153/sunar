@@ -21,7 +21,6 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#F9F9F9] pb-20">
-      {/* Header */}
       <header className="bg-white border-b border-zinc-200 px-4 py-4 sticky top-0 z-50">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -36,7 +35,6 @@ export default async function DashboardPage() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">
-        {/* Trial Banner */}
         {session.status === "trial" && daysLeft <= 3 && (
           <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3">
             <p className="text-red-600 font-bold text-sm">⚠️ {daysLeft} दिन में परीक्षण समाप्त होगा।</p>
@@ -53,38 +51,35 @@ export default async function DashboardPage() {
           </div>
         )}
 
-        {/* नमस्ते */}
         <div className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm">
           <p className="text-zinc-500 text-sm">नमस्ते,</p>
           <p className="text-xl font-black text-zinc-800">{session.name} 🙏</p>
         </div>
 
-        {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
           <Link href="/dashboard/girvi" className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col items-center gap-2 hover:border-[#AA7D6E] transition">
             <span className="text-3xl">🏦</span>
             <span className="font-bold text-zinc-800 text-sm">गिरवी</span>
-            <span className="text-xs text-zinc-400">बंधक का हिसाब</span>
+            <span className="text-xs text-zinc-600">बंधक का हिसाब</span>
           </Link>
           <Link href="/dashboard/karigar" className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col items-center gap-2 hover:border-[#AA7D6E] transition">
             <span className="text-3xl">🔨</span>
             <span className="font-bold text-zinc-800 text-sm">कारीगर</span>
-            <span className="text-xs text-zinc-400">काम का हिसाब</span>
+            <span className="text-xs text-zinc-600">काम का हिसाब</span>
           </Link>
           <Link href="/dashboard/bhav" className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col items-center gap-2 hover:border-[#AA7D6E] transition">
             <span className="text-3xl">📈</span>
             <span className="font-bold text-zinc-800 text-sm">भाव</span>
-            <span className="text-xs text-zinc-400">सोना-चाँदी रेट</span>
+            <span className="text-xs text-zinc-600">सोना-चाँदी रेट</span>
           </Link>
           <Link href="/dashboard/bill" className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm flex flex-col items-center gap-2 hover:border-[#AA7D6E] transition">
             <span className="text-3xl">🧾</span>
             <span className="font-bold text-zinc-800 text-sm">बिल</span>
-            <span className="text-xs text-zinc-400">बिल बनाओ</span>
+            <span className="text-xs text-zinc-600">बिल बनाओ</span>
           </Link>
         </div>
       </main>
 
-      {/* Bottom Nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-200 flex justify-around items-center py-2">
         <Link href="/dashboard" className="flex flex-col items-center gap-0.5 px-3 py-1 text-[#AA7D6E]">
           <span className="text-xl">🏠</span>
@@ -102,9 +97,9 @@ export default async function DashboardPage() {
           <span className="text-xl">📈</span>
           <span className="text-[10px] font-bold">भाव</span>
         </Link>
-        <Link href="/dashboard/bill" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
-          <span className="text-xl">🧾</span>
-          <span className="text-[10px] font-bold">बिल</span>
+        <Link href="/dashboard/settings" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
+          <span className="text-xl">⚙️</span>
+          <span className="text-[10px] font-bold">सेटिंग</span>
         </Link>
       </nav>
     </div>

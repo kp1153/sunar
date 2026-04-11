@@ -96,41 +96,108 @@ export default function Home() {
 
         {/* Feature Grid */}
         <section id="features" className="py-20 border-t border-zinc-100">
-          <h2 className="text-3xl font-black text-center mb-12">
+          <h2 className="text-3xl font-black text-center mb-4">
             खास सुनारों के लिए फीचर्स
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 bg-white rounded-3xl border border-zinc-100 shadow-sm hover:shadow-xl transition-shadow group">
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform inline-block">
-                ⚖️
+          <p className="text-center text-zinc-400 mb-12">
+            जो काम रोज़ होता है — वो सब एक जगह
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: "🏦",
+                title: "गिरवी का हिसाब",
+                desc: "किसने क्या रखा, कितना ब्याज बना — एक नज़र में। WhatsApp पर हिसाब भेजो।",
+              },
+              {
+                icon: "🔨",
+                title: "कारीगर का हिसाब",
+                desc: "किसको कितना सोना दिया, क्या बनाने को, मजदूरी कितनी बनी।",
+              },
+              {
+                icon: "📈",
+                title: "आज का भाव",
+                desc: "सोने-चाँदी का रोज़ का भाव खुद डालो — बिल में अपने आप जुड़ेगा।",
+              },
+              {
+                icon: "🧾",
+                title: "बिल बनाओ",
+                desc: "वजन डालो, टंच चुनो, मेकिंग चार्ज जोड़ो — GST बिल तैयार।",
+              },
+              {
+                icon: "💬",
+                title: "WhatsApp बिल",
+                desc: "बिल या गिरवी की रसीद सीधे ग्राहक के WhatsApp पर भेजो।",
+              },
+              {
+                icon: "☁️",
+                title: "डेटा सुरक्षित",
+                desc: "फोन टूटे या खो जाए — डेटा क्लाउड पर सुरक्षित रहेगा।",
+              },
+            ].map((f, i) => (
+              <div
+                key={i}
+                className="p-6 bg-white rounded-3xl border border-zinc-100 shadow-sm hover:shadow-xl transition-shadow"
+              >
+                <div className="text-4xl mb-3">{f.icon}</div>
+                <h3 className="text-base font-bold mb-2">{f.title}</h3>
+                <p className="text-zinc-500 text-sm leading-relaxed">
+                  {f.desc}
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-3">टंच और मेकिंग का गणित</h3>
-              <p className="text-zinc-500">
-                वजन डालिए, टंच चुनिए और मेकिंग चार्ज जोड़िये। सॉफ्टवेयर नेट वेट
-                और फाइनल कीमत खुद निकाल लेगा।
-              </p>
-            </div>
-            <div className="p-8 bg-white rounded-3xl border border-zinc-100 shadow-sm hover:shadow-xl transition-shadow group">
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform inline-block">
-                🔄
+            ))}
+          </div>
+        </section>
+
+        {/* कैसे चलाएं */}
+        <section className="py-20 border-t border-zinc-100">
+          <h2 className="text-3xl font-black text-center mb-4">कैसे चलाएं?</h2>
+          <p className="text-center text-zinc-400 mb-12">
+            बस ४ काम — ५ मिनट में शुरू
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+            {[
+              {
+                step: "१",
+                icon: "🔐",
+                title: "गूगल से लॉगिन करो",
+                desc: "अपने जीमेल से लॉगिन करो — कोई पासवर्ड नहीं बनाना।",
+              },
+              {
+                step: "२",
+                icon: "⚙️",
+                title: "दुकान की जानकारी भरो",
+                desc: "दुकान का नाम, पता, मोबाइल — एक बार भरो, बिल पर छपेगा।",
+              },
+              {
+                step: "३",
+                icon: "📈",
+                title: "आज का भाव डालो",
+                desc: "सोने-चाँदी का भाव डालो — बिल में अपने आप जुड़ेगा।",
+              },
+              {
+                step: "४",
+                icon: "🧾",
+                title: "काम शुरू करो",
+                desc: "गिरवी लिखो, कारीगर को काम दो, बिल बनाओ — सब तैयार।",
+              },
+            ].map((h, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-3xl border border-zinc-100 shadow-sm p-6 text-center"
+              >
+                <div className="w-10 h-10 bg-[#AA7D6E] text-white font-black text-lg rounded-full flex items-center justify-center mx-auto mb-3">
+                  {h.step}
+                </div>
+                <div className="text-3xl mb-2">{h.icon}</div>
+                <h3 className="font-bold text-zinc-800 text-sm mb-2">
+                  {h.title}
+                </h3>
+                <p className="text-zinc-500 text-xs leading-relaxed">
+                  {h.desc}
+                </p>
               </div>
-              <h3 className="text-xl font-bold mb-3">पुराना सोना (Exchange)</h3>
-              <p className="text-zinc-500">
-                ग्राहक का पुराना सोना काटकर नए गहने का बिल बनाना अब और भी आसान।
-              </p>
-            </div>
-            <div className="p-8 bg-white rounded-3xl border border-zinc-100 shadow-sm hover:shadow-xl transition-shadow group">
-              <div className="text-4xl mb-4 group-hover:scale-110 transition-transform inline-block">
-                🏦
-              </div>
-              <h3 className="text-xl font-bold mb-3">
-                स्मार्ट गिरवी कैलकुलेटर
-              </h3>
-              <p className="text-zinc-500">
-                ब्याज की दर सेट करें और गिरवी छूड़ाते समय एक क्लिक में पूरा हिसाब
-                देखें।
-              </p>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -150,31 +217,22 @@ export default function Home() {
           </div>
         </section>
       </main>
-
       {/* Footer */}
-      <footer className="bg-zinc-900 text-zinc-500 py-16 px-6">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-          <div className="text-left">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-[#AA7D6E] rounded flex items-center justify-center text-white text-xl">
-                💎
-              </div>
-              <span className="font-bold text-xl text-white">स्वर्णशिल्पी</span>
-            </div>
-            <p className="max-w-xs">
-              वाराणसी और सूरत की विरासत को डिजिटल मजबूती देने के लिए प्रतिबद्ध।
-            </p>
+      <footer className="bg-zinc-900 text-zinc-500 py-10 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-[#AA7D6E] rounded flex items-center justify-center text-white text-xl">💎</div>
+            <span className="font-bold text-xl text-white">स्वर्णशिल्पी</span>
           </div>
-          <div className="text-center md:text-right">
-            <p className="font-bold text-zinc-300 mb-2">
-              © 2026 निशांत सॉफ्टवेयर सॉल्यूशन्स
-            </p>
-            <p className="text-sm italic">
-              सप्रेम निर्मित: कामता प्रसाद (वेब स्पेशलिस्ट)
-            </p>
+          <div className="text-center">
+            <p className="font-bold text-zinc-300">© 2026 निशांत सॉफ्टवेयर सॉल्यूशन्स</p>
+            <p className="text-sm italic">सप्रेम निर्मित: कामता प्रसाद</p>
+          </div>
+          <div className="flex gap-4 text-sm font-semibold">
+            <a href="tel:+919996865069" className="hover:text-white transition">📞 9996865069</a>
+            <a href="https://wa.me/919996865069" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">💬 WhatsApp</a>
           </div>
         </div>
       </footer>
-    </div>
-  );
-}
+
+      
