@@ -406,12 +406,14 @@ export default function GirviPage() {
           })}
       </main>
 
+  // File का सब कुछ same रखो — सिर्फ सबसे नीचे का <nav> block ये वाला बनाओ:
+
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-200 flex justify-around items-center py-2">
         <Link href="/dashboard" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">🏠</span><span className="text-[10px] font-bold">होम</span></Link>
-        <Link href="/dashboard/girvi" className="flex flex-col items-center gap-0.5 px-3 py-1 text-[#AA7D6E]"><span className="text-xl">🏦</span><span className="text-[10px] font-bold">गिरवी</span></Link>
+        <Link href="/dashboard/girvi" className="flex flex-col items-center gap-0.5 px-3 py-1 text-[#AA7D6E]"><span className="text-xl">🏦</span><span className="text-[10px] font-black">गिरवी</span></Link>
         <Link href="/dashboard/bill" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">🧾</span><span className="text-[10px] font-bold">बिल</span></Link>
-        <Link href="/dashboard/karigar" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">🔨</span><span className="text-[10px] font-bold">कारीगर</span></Link>
-        <Link href="/dashboard/settings" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">⚙️</span><span className="text-[10px] font-bold">सेटिंग</span></Link>
+        <Link href="/dashboard/urd" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">♻️</span><span className="text-[10px] font-bold">पुराना</span></Link>
+        <Link href="/dashboard/stock" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">📦</span><span className="text-[10px] font-bold">स्टॉक</span></Link>
       </nav>
     </div>
   );

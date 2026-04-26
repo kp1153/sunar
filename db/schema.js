@@ -25,7 +25,7 @@ export const girvi = sqliteTable("girvi", {
   customerName: text("customer_name").notNull(),
   customerPhone: text("customer_phone"),
   itemDetails: text("item_details").notNull(),
-  weightGrams: real("weight_grams"),           // ← यह missing था
+  weightGrams: real("weight_grams"),
   loanAmount: integer("loan_amount").notNull(),
   interestRate: real("interest_rate").notNull(),
   status: text("status").notNull().default("active"),
@@ -56,7 +56,6 @@ export const karigarWork = sqliteTable("karigar_work", {
   returnedAt: text("returned_at"),
 });
 
-// ← यह पूरी टेबल missing थी — dashboard और bills API दोनों crash हो रहे थे
 export const bills = sqliteTable("bills", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("user_id").notNull(),
@@ -74,6 +73,14 @@ export const bills = sqliteTable("bills", {
   gst: real("gst").notNull(),
   totalAmount: real("total_amount").notNull(),
   paymentMode: text("payment_mode").notNull().default("नकद"),
+  hallmarkNo: text("hallmark_no"),
+  huid: text("huid"),
+  oldGoldWeight: real("old_gold_weight"),
+  oldGoldPurity: text("old_gold_purity"),
+  oldGoldRate: real("old_gold_rate"),
+  oldGoldValue: real("old_gold_value"),
+  netPayable: real("net_payable"),
+  stockItemId: integer("stock_item_id"),
   createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
 });
 
@@ -91,5 +98,37 @@ export const settings = sqliteTable("settings", {
 export const preActivations = sqliteTable("pre_activations", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   email: text("email").notNull().unique(),
+  createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
+});
+
+export const urdPurchases = sqliteTable("urd_purchases", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull(),
+  customerName: text("customer_name").notNull(),
+  customerPhone: text("customer_phone"),
+  idProof: text("id_proof"),
+  idNumber: text("id_number"),
+  metalType: text("metal_type").notNull(),
+  purity: text("purity").notNull(),
+  weight: real("weight").notNull(),
+  ratePerTen: real("rate_per_ten").notNull(),
+  totalAmount: real("total_amount").notNull(),
+  paymentMode: text("payment_mode").notNull().default("नकद"),
+  notes: text("notes"),
+  createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
+});
+
+export const stockItems = sqliteTable("stock_items", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull(),
+  barcode: text("barcode").notNull(),
+  name: text("name").notNull(),
+  metalType: text("metal_type").notNull(),
+  purity: text("purity").notNull(),
+  weight: real("weight").notNull(),
+  makingCharge: real("making_charge").default(0),
+  hallmarkNo: text("hallmark_no"),
+  huid: text("huid"),
+  status: text("status").notNull().default("available"),
   createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
 });

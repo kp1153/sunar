@@ -17,6 +17,7 @@
     "dotenv": "^17.4.1",
     "drizzle-orm": "^0.45.2",
     "jose": "^6.2.2",
+    "jsbarcode": "^3.12.3",
     "next": "16.2.3",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -34,8 +35,16 @@
   "build": {
     "appId": "com.nishant.sunar",
     "productName": "स्वर्णशिल्पी",
-    "directories": { "output": "dist" },
-    "win": { "icon": "electron/icon.ico", "target": "nsis" },
-    "nsis": { "oneClick": false, "perMachine": false }
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "icon": "electron/icon.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false
+    }
   }
 }

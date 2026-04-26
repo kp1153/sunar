@@ -35,7 +35,6 @@ export default function BhavPage() {
     load();
   }, []);
 
-  // metal बदलने पर purity reset
   const handleMetalChange = (metal) => {
     const firstPurity = PURITIES[metal][0];
     setForm({ ...form, metal, purity: firstPurity, price: "" });
@@ -66,7 +65,6 @@ export default function BhavPage() {
     }
   };
 
-  // आज का सोना 22K निकालो
   const gold22k = rows.find((r) => r.metal === "सोना" && r.purity === "22K");
   const silver999 = rows.find((r) => r.metal === "चाँदी" && r.purity === "999");
 
@@ -82,7 +80,6 @@ export default function BhavPage() {
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-4 space-y-4">
-        {/* आज का quick summary */}
         {(gold22k || silver999) && (
           <div className="grid grid-cols-2 gap-3">
             {gold22k && (
@@ -110,11 +107,9 @@ export default function BhavPage() {
           </div>
         )}
 
-        {/* Form */}
         <div className="bg-white rounded-2xl p-5 border border-zinc-100 shadow-sm space-y-4">
           <h2 className="font-black text-zinc-800">भाव अपडेट करें</h2>
 
-          {/* Metal selector */}
           <div className="grid grid-cols-2 gap-2">
             {METALS.map((m) => (
               <button
@@ -131,7 +126,6 @@ export default function BhavPage() {
             ))}
           </div>
 
-          {/* Purity selector */}
           <div className="flex flex-wrap gap-2">
             {PURITIES[form.metal].map((p) => (
               <button
@@ -177,7 +171,6 @@ export default function BhavPage() {
           </button>
         </div>
 
-        {/* All rates */}
         <h2 className="font-black text-zinc-600 text-sm uppercase tracking-widest">
           सभी भाव
         </h2>
@@ -239,11 +232,11 @@ export default function BhavPage() {
         <Link href="/dashboard/bill" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
           <span className="text-xl">🧾</span><span className="text-[10px] font-bold">बिल</span>
         </Link>
-        <Link href="/dashboard/karigar" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
-          <span className="text-xl">🔨</span><span className="text-[10px] font-bold">कारीगर</span>
+        <Link href="/dashboard/urd" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
+          <span className="text-xl">♻️</span><span className="text-[10px] font-bold">पुराना</span>
         </Link>
-        <Link href="/dashboard/bhav" className="flex flex-col items-center gap-0.5 px-3 py-1 text-[#AA7D6E]">
-          <span className="text-xl">📈</span><span className="text-[10px] font-bold">भाव</span>
+        <Link href="/dashboard/stock" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400">
+          <span className="text-xl">📦</span><span className="text-[10px] font-bold">स्टॉक</span>
         </Link>
       </nav>
     </div>

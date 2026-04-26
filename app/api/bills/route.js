@@ -1,10 +1,9 @@
 import { db } from "@/db";
-import { bills } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { bills, stockItems } from "@/db/schema";
+import { eq, desc, and } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { getSession } from "@/lib/session";
 
-// Bill number generate करना — BILL-YYYYMMDD-XXX format
 function generateBillNumber(existingCount) {
   const today = new Date();
   const dateStr =
@@ -36,28 +35,17 @@ export async function POST(request) {
 
   const body = await request.json();
   const {
-    customerName,
-    customerPhone,
-    item,
-    metalType,
-    purity,
-    grossWeight,
-    netWeight,
-    ratePerTen,
-    metalValue,
-    makingCharge,
-    gst,
-    totalAmount,
-    paymentMode,
+    customerName, customerPhone, item, metalType, purity,
+    grossWeight, netWeight, ratePerTen, metalValue, makingCharge,
+    gst, totalAmount, paymentMode,
+    hallmarkNo, huid,
+    oldGoldWeight, oldGoldPurity, oldGoldRate, oldGoldValue, netPayable,
+    stockItemId,
   } = body;
 
   if (!customerName || !item || !netWeight || !totalAmount) {
     return Response.json({ error: "जरूरी जानकारी नहीं है" }, { status: 400 });
   }
-
-  // आज के बिलों की count लो ताकि bill number बन सके
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
 
   const allBills = await db
     .select()
@@ -66,28 +54,41 @@ export async function POST(request) {
 
   const billNumber = generateBillNumber(allBills.length);
 
-  const inserted = await db
-    .insert(bills)
-    .values({
-      userId: session.userId,
-      billNumber,
-      customerName,
-      customerPhone: customerPhone || null,
-      item,
-      metalType,
-      purity,
-      grossWeight: grossWeight ? parseFloat(grossWeight) : null,
-      netWeight: parseFloat(netWeight),
-      ratePerTen: parseFloat(ratePerTen),
-      metalValue: parseFloat(metalValue),
-      makingCharge: makingCharge ? parseFloat(makingCharge) : 0,
-      gst: parseFloat(gst),
-      totalAmount: parseFloat(totalAmount),
-      paymentMode: paymentMode || "नकद",
-    })
-    .returning();
+  await db.insert(bills).values({
+    userId: session.userId,
+    billNumber,
+    customerName,
+    customerPhone: customerPhone || null,
+    item,
+    metalType,
+    purity,
+    grossWeight: grossWeight ? parseFloat(grossWeight) : null,
+    netWeight: parseFloat(netWeight),
+    ratePerTen: parseFloat(ratePerTen),
+    metalValue: parseFloat(metalValue),
+    makingCharge: makingCharge ? parseFloat(makingCharge) : 0,
+    gst: parseFloat(gst),
+    totalAmount: parseFloat(totalAmount),
+    paymentMode: paymentMode || "नकद",
+    hallmarkNo: hallmarkNo || null,
+    huid: huid || null,
+    oldGoldWeight: oldGoldWeight ? parseFloat(oldGoldWeight) : null,
+    oldGoldPurity: oldGoldPurity || null,
+    oldGoldRate: oldGoldRate ? parseFloat(oldGoldRate) : null,
+    oldGoldValue: oldGoldValue ? parseFloat(oldGoldValue) : null,
+    netPayable: netPayable ? parseFloat(netPayable) : parseFloat(totalAmount),
+    stockItemId: stockItemId || null,
+  });
 
-  return Response.json(inserted[0]);
+  // अगर stock से लिया था, उसे "sold" mark करो
+  if (stockItemId) {
+    await db
+      .update(stockItems)
+      .set({ status: "sold" })
+      .where(and(eq(stockItems.id, stockItemId), eq(stockItems.userId, session.userId)));
+  }
+
+  return Response.json({ ok: true, billNumber });
 }
 
 export async function DELETE(request) {
@@ -97,12 +98,14 @@ export async function DELETE(request) {
 
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
-
   if (!id) return Response.json({ error: "id जरूरी है" }, { status: 400 });
+
+  const idNum = parseInt(id);
+  if (!idNum) return Response.json({ error: "गलत id" }, { status: 400 });
 
   await db
     .delete(bills)
-    .where(eq(bills.id, parseInt(id)));
+    .where(and(eq(bills.id, idNum), eq(bills.userId, session.userId)));
 
   return Response.json({ ok: true });
 }
