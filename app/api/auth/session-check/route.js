@@ -1,11 +1,18 @@
 import { cookies } from "next/headers";
 import { getSession } from "@/lib/session";
-import { NextResponse } from "next/server";
 
 export async function GET() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("session")?.value;
-  const session = await getSession(token);
-  if (session) return NextResponse.json({ ok: true, email: session.email });
-  return NextResponse.json({ ok: false });
+  const session = await getSession(cookieStore.get("session")?.value);
+
+  if (!session) {
+    return Response.json({ email: null }, { status: 401 });
+  }
+
+  return Response.json({
+    email: session.email,
+    name: session.name,
+    status: session.status,
+    expiryDate: session.expiryDate,
+  });
 }
