@@ -5,7 +5,10 @@ import Link from "next/link";
 function calcInterest(amount, rate, startDate) {
   const start = new Date(startDate);
   const today = new Date();
-  const diffDays = Math.max(0, Math.ceil((today - start) / (1000 * 60 * 60 * 24)));
+  const diffDays = Math.max(
+    0,
+    Math.ceil((today - start) / (1000 * 60 * 60 * 24)),
+  );
   // Calendar months — accurate calculation
   let months = 0;
   const d = new Date(start);
@@ -17,7 +20,9 @@ function calcInterest(amount, rate, startDate) {
       const daysInMonth = new Date(d.getFullYear(), d.getMonth(), 0).getDate();
       const remaining = new Date(start);
       remaining.setMonth(remaining.getMonth() + months);
-      const partialDays = Math.ceil((today - remaining) / (1000 * 60 * 60 * 24));
+      const partialDays = Math.ceil(
+        (today - remaining) / (1000 * 60 * 60 * 24),
+      );
       months += partialDays / daysInMonth;
       break;
     }
@@ -57,12 +62,23 @@ export default function GirviPage() {
     }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const submit = async () => {
-    if (!form.customerName.trim()) { setError("ग्राहक का नाम डालें"); return; }
-    if (!form.itemDetails.trim()) { setError("गहने की जानकारी डालें"); return; }
-    if (!form.loanAmount || parseInt(form.loanAmount) <= 0) { setError("सही रकम डालें"); return; }
+    if (!form.customerName.trim()) {
+      setError("ग्राहक का नाम डालें");
+      return;
+    }
+    if (!form.itemDetails.trim()) {
+      setError("गहने की जानकारी डालें");
+      return;
+    }
+    if (!form.loanAmount || parseInt(form.loanAmount) <= 0) {
+      setError("सही रकम डालें");
+      return;
+    }
     setSaving(true);
     setError("");
     try {
@@ -73,7 +89,14 @@ export default function GirviPage() {
       });
       if (!res.ok) throw new Error();
       setShow(false);
-      setForm({ customerName: "", customerPhone: "", itemDetails: "", weightGrams: "", loanAmount: "", interestRate: "1.5" });
+      setForm({
+        customerName: "",
+        customerPhone: "",
+        itemDetails: "",
+        weightGrams: "",
+        loanAmount: "",
+        interestRate: "1.5",
+      });
       await load();
     } catch {
       setError("सेव नहीं हो सका। दोबारा कोशिश करें।");
@@ -111,7 +134,7 @@ export default function GirviPage() {
       search.trim()
         ? r.customerName.toLowerCase().includes(search.toLowerCase()) ||
           (r.customerPhone && r.customerPhone.includes(search))
-        : true
+        : true,
     );
 
   const totalActiveLoan = rows
@@ -123,11 +146,16 @@ export default function GirviPage() {
       <header className="bg-white border-b border-zinc-200 px-4 py-4 sticky top-0 z-50">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link href="/dashboard" className="text-zinc-400 text-sm">← वापस</Link>
+            <Link href="/dashboard" className="text-zinc-400 text-sm">
+              ← वापस
+            </Link>
             <h1 className="text-lg font-black text-zinc-800">🏦 गिरवी खाता</h1>
           </div>
           <button
-            onClick={() => { setShow(true); setError(""); }}
+            onClick={() => {
+              setShow(true);
+              setError("");
+            }}
             className="bg-[#AA7D6E] text-white text-sm font-black px-4 py-2 rounded-xl"
           >
             + नई एंट्री
@@ -140,34 +168,49 @@ export default function GirviPage() {
         <div className="fixed inset-0 bg-black/60 z-50 flex items-end">
           <div className="bg-white w-full rounded-t-3xl p-6 space-y-4 max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-black text-zinc-800">नई गिरवी एंट्री</h2>
-              <button onClick={() => setShow(false)} className="text-zinc-400 text-2xl leading-none">×</button>
+              <h2 className="text-lg font-black text-zinc-800">
+                नई गिरवी एंट्री
+              </h2>
+              <button
+                onClick={() => setShow(false)}
+                className="text-zinc-400 text-2xl leading-none"
+              >
+                ×
+              </button>
             </div>
 
             <input
               placeholder="ग्राहक का नाम *"
               value={form.customerName}
-              onChange={(e) => setForm({ ...form, customerName: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, customerName: e.target.value })
+              }
               className="w-full p-4 bg-zinc-50 rounded-2xl ring-1 ring-zinc-200 outline-none text-base focus:ring-[#AA7D6E]"
             />
             <input
               placeholder="मोबाइल नंबर (WhatsApp के लिए)"
               value={form.customerPhone}
-              onChange={(e) => setForm({ ...form, customerPhone: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, customerPhone: e.target.value })
+              }
               className="w-full p-4 bg-zinc-50 rounded-2xl ring-1 ring-zinc-200 outline-none text-base"
               type="tel"
             />
             <textarea
               placeholder="गहने का विवरण * (जैसे: सोने की अंगूठी, हार)"
               value={form.itemDetails}
-              onChange={(e) => setForm({ ...form, itemDetails: e.target.value })}
+              onChange={(e) =>
+                setForm({ ...form, itemDetails: e.target.value })
+              }
               className="w-full p-4 bg-zinc-50 rounded-2xl ring-1 ring-zinc-200 outline-none text-base h-20 focus:ring-[#AA7D6E]"
             />
             <div className="grid grid-cols-2 gap-3">
               <input
                 placeholder="वजन (ग्राम)"
                 value={form.weightGrams}
-                onChange={(e) => setForm({ ...form, weightGrams: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, weightGrams: e.target.value })
+                }
                 className="w-full p-4 bg-zinc-50 rounded-2xl ring-1 ring-zinc-200 outline-none text-base"
                 type="number"
                 step="0.1"
@@ -175,13 +218,17 @@ export default function GirviPage() {
               <input
                 placeholder="दी गई रकम ₹ *"
                 value={form.loanAmount}
-                onChange={(e) => setForm({ ...form, loanAmount: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, loanAmount: e.target.value })
+                }
                 className="w-full p-4 bg-zinc-50 rounded-2xl ring-1 ring-zinc-200 outline-none text-base"
                 type="number"
               />
             </div>
             <div className="bg-zinc-50 rounded-2xl p-4 ring-1 ring-zinc-200">
-              <p className="text-xs text-zinc-400 font-bold mb-2">ब्याज दर — प्रति माह</p>
+              <p className="text-xs text-zinc-400 font-bold mb-2">
+                ब्याज दर — प्रति माह
+              </p>
               <div className="flex gap-2 flex-wrap">
                 {["1", "1.5", "2", "2.5", "3"].map((r) => (
                   <button
@@ -199,7 +246,9 @@ export default function GirviPage() {
               </div>
             </div>
 
-            {error && <p className="text-red-500 text-sm font-medium">⚠️ {error}</p>}
+            {error && (
+              <p className="text-red-500 text-sm font-medium">⚠️ {error}</p>
+            )}
 
             <div className="flex gap-3">
               <button
@@ -226,7 +275,9 @@ export default function GirviPage() {
           <div className="bg-white rounded-3xl p-6 w-full max-w-sm space-y-4 text-center">
             <p className="text-3xl">🗑️</p>
             <h3 className="font-black text-zinc-800 text-lg">एंट्री हटाएं?</h3>
-            <p className="text-zinc-500 text-sm">यह एंट्री हमेशा के लिए हट जाएगी।</p>
+            <p className="text-zinc-500 text-sm">
+              यह एंट्री हमेशा के लिए हट जाएगी।
+            </p>
             <div className="flex gap-3">
               <button
                 onClick={() => deleteGirvi(deleteId)}
@@ -249,7 +300,9 @@ export default function GirviPage() {
         {/* Summary */}
         <div className="bg-[#AA7D6E]/10 border border-[#AA7D6E]/20 rounded-2xl p-4 flex justify-between items-center">
           <div>
-            <p className="text-xs text-[#AA7D6E] font-bold uppercase">कुल सक्रिय गिरवी</p>
+            <p className="text-xs text-[#AA7D6E] font-bold uppercase">
+              कुल सक्रिय गिरवी
+            </p>
             <p className="text-2xl font-black text-zinc-800">
               {rows.filter((r) => r.status === "active").length} एंट्री
             </p>
@@ -264,7 +317,9 @@ export default function GirviPage() {
 
         {/* Search */}
         <div className="relative">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">🔍</span>
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400">
+            🔍
+          </span>
           <input
             placeholder="नाम या नंबर से खोजें..."
             value={search}
@@ -278,7 +333,9 @@ export default function GirviPage() {
           <button
             onClick={() => setTab("active")}
             className={`flex-1 py-2.5 rounded-xl font-black text-sm transition ${
-              tab === "active" ? "bg-[#AA7D6E] text-white" : "bg-white text-zinc-500 border border-zinc-200"
+              tab === "active"
+                ? "bg-[#AA7D6E] text-white"
+                : "bg-white text-zinc-500 border border-zinc-200"
             }`}
           >
             सक्रिय ({rows.filter((r) => r.status === "active").length})
@@ -286,7 +343,9 @@ export default function GirviPage() {
           <button
             onClick={() => setTab("closed")}
             className={`flex-1 py-2.5 rounded-xl font-black text-sm transition ${
-              tab === "closed" ? "bg-zinc-800 text-white" : "bg-white text-zinc-500 border border-zinc-200"
+              tab === "closed"
+                ? "bg-zinc-800 text-white"
+                : "bg-white text-zinc-500 border border-zinc-200"
             }`}
           >
             बंद ({rows.filter((r) => r.status === "closed").length})
@@ -297,7 +356,10 @@ export default function GirviPage() {
         {loading && (
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-2xl p-4 border border-zinc-100 animate-pulse h-32" />
+              <div
+                key={i}
+                className="bg-white rounded-2xl p-4 border border-zinc-100 animate-pulse h-32"
+              />
             ))}
           </div>
         )}
@@ -307,7 +369,11 @@ export default function GirviPage() {
           <div className="text-center py-16">
             <p className="text-4xl mb-3">{tab === "active" ? "🏦" : "✅"}</p>
             <p className="text-zinc-400 font-medium">
-              {search ? "कोई नतीजा नहीं मिला" : tab === "active" ? "कोई सक्रिय गिरवी नहीं" : "कोई बंद गिरवी नहीं"}
+              {search
+                ? "कोई नतीजा नहीं मिला"
+                : tab === "active"
+                  ? "कोई सक्रिय गिरवी नहीं"
+                  : "कोई बंद गिरवी नहीं"}
             </p>
             {tab === "active" && !search && (
               <button
@@ -323,21 +389,31 @@ export default function GirviPage() {
         {/* Cards */}
         {!loading &&
           filtered.map((row) => {
-            const calc = calcInterest(row.loanAmount, row.interestRate, row.entryDate);
+            const calc = calcInterest(
+              row.loanAmount,
+              row.interestRate,
+              row.entryDate,
+            );
             const whatsappMsg = `नमस्ते ${row.customerName} जी 🙏%0A%0Aआपकी गिरवी का हिसाब:%0Aगहना: ${row.itemDetails}%0Aमूलधन: ₹${row.loanAmount}%0Aब्याज (${row.interestRate}%%/माह × ${calc.days} दिन): ₹${calc.interest}%0A*कुल देय: ₹${calc.total}*%0A%0Aकृपया जल्द आएं। धन्यवाद 🙏`;
 
             return (
               <div
                 key={row.id}
                 className={`bg-white rounded-2xl p-4 border shadow-sm space-y-3 ${
-                  tab === "closed" ? "opacity-70 border-zinc-100" : "border-zinc-100"
+                  tab === "closed"
+                    ? "opacity-70 border-zinc-100"
+                    : "border-zinc-100"
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="font-black text-zinc-800 text-base">{row.customerName}</p>
+                    <p className="font-black text-zinc-800 text-base">
+                      {row.customerName}
+                    </p>
                     {row.customerPhone && (
-                      <p className="text-xs text-zinc-400">{row.customerPhone}</p>
+                      <p className="text-xs text-zinc-400">
+                        {row.customerPhone}
+                      </p>
                     )}
                   </div>
                   <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-black">
@@ -345,22 +421,33 @@ export default function GirviPage() {
                   </span>
                 </div>
 
-                <p className="text-zinc-500 text-sm">{row.itemDetails}
-                  {row.weightGrams ? <span className="ml-1 text-zinc-400">({row.weightGrams}g)</span> : null}
+                <p className="text-zinc-500 text-sm">
+                  {row.itemDetails}
+                  {row.weightGrams ? (
+                    <span className="ml-1 text-zinc-400">
+                      ({row.weightGrams}g)
+                    </span>
+                  ) : null}
                 </p>
 
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div className="bg-zinc-50 rounded-xl p-2">
                     <p className="text-xs text-zinc-400">मूलधन</p>
-                    <p className="font-black text-zinc-800 text-sm">₹{row.loanAmount.toLocaleString("hi-IN")}</p>
+                    <p className="font-black text-zinc-800 text-sm">
+                      ₹{row.loanAmount.toLocaleString("hi-IN")}
+                    </p>
                   </div>
                   <div className="bg-red-50 rounded-xl p-2">
                     <p className="text-xs text-zinc-400">ब्याज</p>
-                    <p className="font-black text-red-500 text-sm">₹{calc.interest.toLocaleString("hi-IN")}</p>
+                    <p className="font-black text-red-500 text-sm">
+                      ₹{calc.interest.toLocaleString("hi-IN")}
+                    </p>
                   </div>
                   <div className="bg-amber-50 rounded-xl p-2">
                     <p className="text-xs text-zinc-400">कुल</p>
-                    <p className="font-black text-[#AA7D6E] text-sm">₹{calc.total.toLocaleString("hi-IN")}</p>
+                    <p className="font-black text-[#AA7D6E] text-sm">
+                      ₹{calc.total.toLocaleString("hi-IN")}
+                    </p>
                   </div>
                 </div>
 
@@ -405,15 +492,42 @@ export default function GirviPage() {
             );
           })}
       </main>
-
-  // File का सब कुछ same रखो — सिर्फ सबसे नीचे का <nav> block ये वाला बनाओ:
-
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-200 flex justify-around items-center py-2">
-        <Link href="/dashboard" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">🏠</span><span className="text-[10px] font-bold">होम</span></Link>
-        <Link href="/dashboard/girvi" className="flex flex-col items-center gap-0.5 px-3 py-1 text-[#AA7D6E]"><span className="text-xl">🏦</span><span className="text-[10px] font-black">गिरवी</span></Link>
-        <Link href="/dashboard/bill" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">🧾</span><span className="text-[10px] font-bold">बिल</span></Link>
-        <Link href="/dashboard/urd" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">♻️</span><span className="text-[10px] font-bold">पुराना</span></Link>
-        <Link href="/dashboard/stock" className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"><span className="text-xl">📦</span><span className="text-[10px] font-bold">स्टॉक</span></Link>
+        <Link
+          href="/dashboard"
+          className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"
+        >
+          <span className="text-xl">🏠</span>
+          <span className="text-[10px] font-bold">होम</span>
+        </Link>
+        <Link
+          href="/dashboard/girvi"
+          className="flex flex-col items-center gap-0.5 px-3 py-1 text-[#AA7D6E]"
+        >
+          <span className="text-xl">🏦</span>
+          <span className="text-[10px] font-black">गिरवी</span>
+        </Link>
+        <Link
+          href="/dashboard/bill"
+          className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"
+        >
+          <span className="text-xl">🧾</span>
+          <span className="text-[10px] font-bold">बिल</span>
+        </Link>
+        <Link
+          href="/dashboard/urd"
+          className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"
+        >
+          <span className="text-xl">♻️</span>
+          <span className="text-[10px] font-bold">पुराना</span>
+        </Link>
+        <Link
+          href="/dashboard/stock"
+          className="flex flex-col items-center gap-0.5 px-3 py-1 text-zinc-400"
+        >
+          <span className="text-xl">📦</span>
+          <span className="text-[10px] font-bold">स्टॉक</span>
+        </Link>
       </nav>
     </div>
   );
