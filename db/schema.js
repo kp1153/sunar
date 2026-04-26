@@ -25,7 +25,7 @@ export const girvi = sqliteTable("girvi", {
   customerName: text("customer_name").notNull(),
   customerPhone: text("customer_phone"),
   itemDetails: text("item_details").notNull(),
-  weightGrams: real("weight_grams"),
+  weightGrams: real("weight_grams"),           // ← यह missing था
   loanAmount: integer("loan_amount").notNull(),
   interestRate: real("interest_rate").notNull(),
   status: text("status").notNull().default("active"),
@@ -56,17 +56,7 @@ export const karigarWork = sqliteTable("karigar_work", {
   returnedAt: text("returned_at"),
 });
 
-export const settings = sqliteTable("settings", {
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  userId: integer("user_id").notNull().unique(),
-  shopName: text("shop_name"),
-  ownerName: text("owner_name"),
-  phone: text("phone"),
-  address: text("address"),
-  gstin: text("gstin"),
-  updatedAt: text("updated_at").$defaultFn(() => new Date().toISOString()),
-});
-
+// ← यह पूरी टेबल missing थी — dashboard और bills API दोनों crash हो रहे थे
 export const bills = sqliteTable("bills", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("user_id").notNull(),
@@ -80,11 +70,22 @@ export const bills = sqliteTable("bills", {
   netWeight: real("net_weight").notNull(),
   ratePerTen: real("rate_per_ten").notNull(),
   metalValue: real("metal_value").notNull(),
-  makingCharge: real("making_charge").notNull().default(0),
+  makingCharge: real("making_charge").default(0),
   gst: real("gst").notNull(),
   totalAmount: real("total_amount").notNull(),
   paymentMode: text("payment_mode").notNull().default("नकद"),
   createdAt: text("created_at").$defaultFn(() => new Date().toISOString()),
+});
+
+export const settings = sqliteTable("settings", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull().unique(),
+  shopName: text("shop_name"),
+  ownerName: text("owner_name"),
+  phone: text("phone"),
+  address: text("address"),
+  gstin: text("gstin"),
+  updatedAt: text("updated_at").$defaultFn(() => new Date().toISOString()),
 });
 
 export const preActivations = sqliteTable("pre_activations", {
